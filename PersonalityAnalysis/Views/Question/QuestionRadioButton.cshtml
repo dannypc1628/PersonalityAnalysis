@@ -1,0 +1,14 @@
+﻿@model PersonalityAnalysis.Models.ViewModels.QuestionViewModel
+@{ 
+    var haveSecend = !String.IsNullOrEmpty(Model.SecendName);
+}
+
+@foreach (var t in Model.Items)
+{
+    <div class="custom-control custom-radio @(haveSecend?"custom-control-inline":"")">
+        @Html.RadioButton("ID_" + Model.ID, t.ID, new { data_ParentID = $"{Model.ID}", id = $"radio{Model.ID}{t.ID}", @class = "custom-control-input", required = "" })
+        <label class="custom-control-label" for=@($"radio{Model.ID}{t.ID}")>
+            @t.Name
+        </label>
+    </div>
+}

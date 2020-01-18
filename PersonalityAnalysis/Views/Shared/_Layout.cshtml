@@ -1,0 +1,96 @@
+﻿@using PersonalityAnalysis.Helper
+@{
+    var userName = UserHelper.GetUserData();
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        @ViewBag.Title - 適性分析 
+    </title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.css" rel="stylesheet" />
+</head>
+<body>
+    <nav class="navbar  navbar-dark bg-dark fixed-top">
+        
+        @if (userName != "")
+        {
+            @Html.ActionLink("職業適性分析", "Index", "Lectures", null, new { @class = "navbar-brand" })
+        }
+        else
+        {
+            <a href="#" class="navbar-brand">職業適性分析</a>
+        }
+        <form class="form-inline ">
+            @{
+                if (userName != "")
+                {
+                    @*<a href="#" class="nav-link text-light">@userName 您好~</a>*@
+
+                    @Html.ActionLink($"{userName} 您好~", "Edit", "Users", new { area = "" }, new { @class = "nav-link text-light" })
+                    @Html.ActionLink("登出", "Logout", "Users", new { area = "" }, new { @class = "nav-link text-light" })
+
+                }
+            }
+        </form>
+    </nav>
+    <br />
+    <br />
+    <br />
+    <br />
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <div class="row justify-content-md-between">
+                <div class="col-md-6 col-12">&copy; 沒有最好的職業，只有最適合您的職業</div>
+                <div class="col-md-6 col-12 text-right">                  
+                                   適在工作、全力以赴！！！
+                </div>
+            </div>
+
+
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.17.0/jquery.validate.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/mvc/5.2.3/jquery.validate.unobtrusive.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    @RenderSection("scripts", required: false)
+    <script>
+        $(function () {
+            $("[data-datetimepicker]").datetimepicker({
+                timepicker: false,
+                mask: false,
+                formatDate: 'Y-m-d',
+                defaultDate: '2000/01/01',
+                format: 'Y-m-d'
+            });
+            $.datetimepicker.setLocale('zh-TW');
+        });
+    </script>
+    <script>
+        (function () {
+            "use strict";
+            window.addEventListener("load", function () {
+                var form = document.getElementById("needs-validation");
+                form.addEventListener("submit", function (event) {
+                    let eel = document.getElementsByClassName("is-invalid");
+                    if (form.checkValidity() == false || eel.length>0) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add("was-validated");
+                }, false);
+            }, false);
+        }());
+    </script>
+</body>
+</html>

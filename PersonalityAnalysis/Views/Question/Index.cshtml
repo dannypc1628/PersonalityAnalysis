@@ -1,0 +1,161 @@
+﻿@model IEnumerable<PersonalityAnalysis.Models.ViewModels.QuestionViewModel>
+
+@{
+    ViewBag.Title = ViewBag.Questionnaire.Name;
+    var thisQuestionnaire = @ViewBag.Questionnaire;
+    bool haveSecend = !String.IsNullOrEmpty(Model.FirstOrDefault().SecendName);
+}
+
+<h2> @thisQuestionnaire.Name</h2>
+
+<br>
+
+
+@if (thisQuestionnaire.Number == 2)
+{
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">說明</h4>
+        <p>
+            行為模式問卷共20題，每一題皆有4個選項，請憑直覺選擇一個答案，沒有對錯
+        </p>
+    </div>
+    <br>
+    <h5>在日常生活上，下列何者描述最符合您的行為表現：</h5>
+}
+else if (thisQuestionnaire.Number == 3)
+{
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">說明</h4>
+        <p>
+            性向測驗共25題，每一題只選一個答案，首先先選出左右兩側中是：幽默？嚴肅？，再選出：強？弱？
+
+        </p>
+    </div>
+    <br>
+
+}
+else if (thisQuestionnaire.Number == 4)
+{
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">說明</h4>
+        <p>
+            適性測驗共20題，每一題只選一個答案，首先先選出左右兩側中是：愛說話？文靜？，再選出：強？弱？
+
+        </p>
+    </div>
+    <br>
+
+}
+
+
+@using (Html.BeginForm("index", "Question", FormMethod.Post, new { id = "needs-validation", novalidate = "" }))
+{
+    <div class="row">
+        <div class="col-2">
+            @Html.DisplayNameFor(model => model.Number)
+        </div>
+        @if (haveSecend)
+        {
+            <div class="col-2">
+
+            </div>
+            <div class="col-4">
+                @Html.DisplayNameFor(model => model.Items)
+            </div>
+
+        }
+        else
+        {
+            <div class="col-md-4 col-4">
+                @Html.DisplayNameFor(model => model.Name)
+            </div>
+            <div class="col-md-6 col-4">
+                @Html.DisplayNameFor(model => model.Items)
+            </div>
+        }
+    </div>
+
+    foreach (var item in Model)
+    {
+        <div class="row border-top">
+
+
+            @if (haveSecend)
+            {<div class="col-md-1 col-12 mb-2">
+                    @Html.DisplayFor(modelItem => item.Number)
+                </div>
+                <div class="col-md-2 col-2 mb-2 ">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </div>
+                <div class="col-md-4 col-8 pr-0 pl-1 ">
+                    @Html.Partial("QuestionRadioButton", item)
+                </div>
+                <div class="col-md-2 col-2 text-left">
+
+                    @Html.DisplayFor(modelItem => item.SecendName)
+
+                </div>
+            }
+            else
+            { <div class="col-1">
+                    @Html.DisplayFor(modelItem => item.Number)
+                </div>
+                <div class="col-md-4 col-11 mb-2">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </div>
+                <div class="col-1"></div>
+                <div class="col-md-6 col-11">
+                    @Html.Partial("QuestionRadioButton", item)
+                </div>
+            }
+
+        </div>
+
+    }
+
+
+
+    @Html.AntiForgeryToken()
+
+    @Html.Hidden("QuestionnaireID", (int)thisQuestionnaire.ID)
+    @Html.Hidden("key", (object)ViewBag.Key.ToString())
+
+    var i = 0;
+    foreach (var k in Model)
+    {
+
+
+        @Html.Hidden("responses[" + i + "].Question_ID", k.ID, new { id = $"Q_{@k.ID}" })
+        @Html.Hidden("responses[" + i + "].Response_ID", 0, new { id = $"R_{@k.ID}" })
+        i++;
+
+    }
+
+    if (thisQuestionnaire.Number == 2)
+    {
+        @*@Html.Partial("價值")*@
+    }
+
+    <div class="form-group mt-3">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="下一步" class="btn btn-outline-secondary" />
+        </div>
+    </div>
+}
+@section scripts{
+    <script>
+        $(document).ready(function () {
+
+            //rblWorkType作業內容 onchange
+            var radio = $("input[name^='ID_']:radio");
+            radio.click(function () {
+                //alert("你選的值是" + this.value + " Parent" + this.dataset.parentid);
+                //console.log("#Q_" + this.dataset.parentid);
+                $("#R_" + this.dataset.parentid).val(this.value);
+
+            });
+
+
+        });
+    </script>
+}

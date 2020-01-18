@@ -1,0 +1,42 @@
+﻿@model PersonalityAnalysis.Models.Lecture
+
+@{
+    ViewBag.Title = "班級資訊";
+}
+
+<h2>@Html.DisplayFor(model => model.Name) - QR Code </h2>
+
+<div>   
+    <hr />
+    
+   
+    
+</div>
+<p class="">
+    @*@Html.ActionLink("編輯", "Edit", new { key = Model.Key }) |*@
+    @Html.ActionLink("填寫問卷", "Create", "Students", new { key = Model.Key }, new { @class = "text-right" })
+    |
+    @Html.ActionLink("回到班級列表", "Index", null, new { @class = "text-right" })
+</p>
+
+<div class="row justify-content-center">
+    <div class="col-lg-6 col-md-4">
+        <div id="qrcodeCanvas" class=""></div>
+    </div>
+</div>
+
+@section scripts{
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+    <script>
+        let url = "@Url.Action("Create", "Students", new { key = Model.Key }, "https")";
+    
+        $('#qrcodeCanvas').qrcode({
+            width: 400,
+            height:400,
+            text: url
+        });
+    </script>
+
+}
+

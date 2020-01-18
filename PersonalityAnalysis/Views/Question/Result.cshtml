@@ -1,0 +1,291 @@
+﻿@model PersonalityAnalysis.Models.Result_View
+
+@{
+    ViewBag.Title = "結果";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div>
+    
+    <hr />
+    <div class="row">
+
+        <div class="col-5 font-weight-bold mb-3">
+            @Html.DisplayNameFor(model => model.Student_Name)
+        </div>
+
+        <div class="col-6">
+            @Html.DisplayFor(model => model.Student_Name)
+        </div>
+
+        <div class="col-5 font-weight-bold mb-3">
+            @Html.DisplayNameFor(model => model.Goal_Name)
+        </div>
+
+        <div class="col-6">
+            @Html.DisplayFor(model => model.Goal_Name)
+        </div>
+
+        <div class="col-5 font-weight-bold mb-3">
+            @Html.DisplayNameFor(model => model.D)
+        </div>
+
+        <div class="col-6">
+            @Html.DisplayFor(model => model.D)
+        </div>
+
+        <div class="col-5 font-weight-bold mb-3">
+            @Html.DisplayNameFor(model => model.I)
+        </div>
+
+        <div class="col-6">
+            @Html.DisplayFor(model => model.I)
+        </div>
+
+        <div class="col-5 font-weight-bold mb-3">
+            @Html.DisplayNameFor(model => model.S)
+        </div>
+
+        <div class="col-6">
+            @Html.DisplayFor(model => model.S)
+        </div>
+
+        <div class="col-5 font-weight-bold mb-3">
+            @Html.DisplayNameFor(model => model.C)
+        </div>
+
+        <div class="col-6">
+            @Html.DisplayFor(model => model.C)
+        </div>
+
+        <div class="col-5 font-weight-bold mb-3">
+            @Html.DisplayNameFor(model => model.Ability)
+        </div>
+
+        <div class="col-6">
+            @Html.DisplayFor(model => model.Ability)
+        </div>
+
+        <div class="col-5 font-weight-bold mb-3">
+            @Html.DisplayNameFor(model => model.Horizontal_Score)
+        </div>
+
+        <div class="col-6">
+            @Html.DisplayFor(model => model.Horizontal_Score)
+        </div>
+
+        <div class="col-5 font-weight-bold mb-3">
+            @Html.DisplayNameFor(model => model.Vertical_Score)
+        </div>
+
+        <div class="col-6">
+            @Html.DisplayFor(model => model.Vertical_Score)
+        </div>
+        <div class="col-5 font-weight-bold mb-3">
+            @Html.DisplayNameFor(model => model.T1_Name)
+        </div>
+
+        <div class="col-6">
+            @Html.DisplayFor(model => model.T1_Name)
+        </div>
+
+        <div class="col-5 font-weight-bold mb-3">
+            @Html.DisplayNameFor(model => model.T2_Name)
+        </div>
+
+        <div class="col-6">
+            @Html.DisplayFor(model => model.T2_Name)
+        </div>
+        <div class="col-5 font-weight-bold mb-3">
+            @Html.DisplayNameFor(model => model.T3_Name)
+        </div>
+
+        <div class="col-6">
+            @Html.DisplayFor(model => model.T3_Name)
+        </div>
+
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class=" col-lg-6 col-12">
+        <canvas id="myChart" width="400" height="400"></canvas>
+    </div>
+</div>
+
+@section scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
+    <script>
+        var labels = [            
+            '例行性工作',
+            '挑戰性工作',
+            '分析性工作',
+            '管理性工作',
+            '一般業務',
+            '一般職員',
+            '一般主管',
+            '影響他人',
+        ];
+        var MychartColors = {
+            red: 'rgb(255, 99, 132 , 1)',
+            orange: 'rgb(255, 159, 64 , 1)',
+            yellow: 'rgb(255, 205, 86, 1)',
+            green: 'rgb(75, 192, 192, 1)',
+            blue: 'rgb(54, 162, 235, 1)',
+            purple: 'rgb(153, 102, 255, 1)',
+            grey: 'rgb(201, 203, 207, 1)'
+        };
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var datas = {
+            datasets: [{
+                label: '我的落點',
+                labels: ['我的落點'],
+                borderColor: MychartColors.red,
+                backgroundColor: MychartColors.red.replace(/[^,]+(?=\))/, '0.2'),
+                data: [{
+                    x: @Model.Horizontal_Score,
+                    y: @Model.Vertical_Score,
+                }
+                ],
+                datalabels: {
+                    color: MychartColors.red
+                }
+            },
+            {
+                label: '案例落點',
+                labels: labels,
+                borderColor: MychartColors.blue,
+                backgroundColor: MychartColors.blue.replace(/[^,]+(?=\))/, '0.2'),
+                data: [{
+                    x: 35,
+                    y: 15,
+                },
+                {
+                    x: 15,
+                    y: 15,
+                },
+                {
+                    x: 35,
+                    y: 35,
+                },
+                {
+                    x: 15,
+                    y: 35,
+                    },
+                    {
+                        x: 20,
+                        y: 20,
+                    },
+                    {
+                        x: 30,
+                        y: 20,
+                    },
+                    {
+                        x: 20,
+                        y: 30,
+                    },
+                    {
+                        x: 30,
+                        y: 30,
+                    }
+                ],
+                datalabels: {
+                    color: MychartColors.blue
+                }
+            }
+            ]
+        };
+        var scatterChart = new Chart(ctx, {
+            type: 'scatter',
+            data: datas,
+            options: {
+                legend: {
+                    labels: {
+                        // This more specific font property overrides the global property
+                        fontColor: 'black',
+                        fontSize:16
+                    }
+                },
+                title: {
+                    display: true,
+                    text: '適性分析表',
+                    fontSize: 16
+                },
+                tooltips: {
+                    enabled: true,
+                    mode: 'point'
+                },
+                responsive: true, // Instruct chart js to respond nicely.
+                maintainAspectRatio: true,
+                scales: {
+                    xAxes: [{
+                        position: 'bottom',
+                        type: 'linear',
+                        ticks: {
+                            display: true,                            
+                            max: 40,
+                            min: 10,
+                            stepSize: 5,
+                            fontSize: 16
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: '外向積極<--->內向含蓄',
+                            fontSize: 16,
+                            fontColor: 'black'
+                        },
+                        gridLines: {
+                            lineWidth: 2,
+                            color: ['rgba(0, 0, 0, 0.1)',
+                                'rgba(0, 0, 0, 0.1)',
+                                'rgba(0, 0, 0, 0.1)',
+                                'rgba(0, 0, 0, 0.5)',
+                                'rgba(0, 0, 0, 0.1)']
+                        }
+                    }],
+                    yAxes: [{
+                        type: 'linear',                         
+                        ticks: {
+                            max: 40,
+                            min: 10,
+                            stepSize: 5,
+                            reverse: true,
+                            fontSize:16
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: '理性<--->感性',
+                            fontSize: 16,
+                            fontColor:'black'
+                        },
+                        gridLines: {
+                            lineWidth: 2,
+                            color: ['rgba(0, 0, 0, 0.1)',
+                                'rgba(0, 0, 0, 0.1)',
+                                'rgba(0, 0, 0, 0.1)',
+                                'rgba(0, 0, 0, 0.5)',
+                                'rgba(0, 0, 0, 0.1)']
+                        }
+                    }]
+                },
+                plugins: {
+                    // Change options for ALL labels of THIS CHART
+                    datalabels: {
+                        align: 'top',
+                        anchor: 'top',
+                        font: {
+                            size:16
+                        },
+                        formatter: function (value, context) {
+                            console.log(context);
+                            return context.dataset.labels[context.dataIndex];  
+                        }
+                        
+                    }
+                }
+            }
+        });
+    </script>
+}

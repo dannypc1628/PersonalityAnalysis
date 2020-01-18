@@ -1,0 +1,33 @@
+﻿@model PersonalityAnalysis.Models.ViewModels.Q2ResultViewModel
+
+@{
+    var score = 0;
+    if (Model.Number == 1)
+    {
+        score = Model.D;
+    }
+    if (Model.Number == 2)
+    {
+        score = Model.I;
+    }
+    if (Model.Number == 3)
+    {
+        score = Model.S;
+    }
+    if (Model.Number == 4)
+    {
+        score = Model.C;
+    }
+}
+<td class="p-2 @(Model.D==score?"table-primary":"")">
+    @Html.DisplayFor(m => m.D)
+</td>
+<td class="p-2 @(Model.I==score?"table-success":"")">
+    @Html.DisplayFor(m => m.I)
+</td>
+<td class="p-2 @(Model.S==score?"table-danger":"")">
+    @Html.DisplayFor(m => m.S)
+</td>
+<td class="p-2 @(Model.C==score?"table-warning":"")">
+    @Html.DisplayFor(m => m.C)
+</td>

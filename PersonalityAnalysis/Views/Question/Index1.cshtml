@@ -1,0 +1,158 @@
+﻿@model IEnumerable<PersonalityAnalysis.Models.ViewModels.QuestionViewModel>
+
+@{
+    ViewBag.Title = ViewBag.Questionnaire.Name;
+    int thisQuestionnaireID = @ViewBag.Questionnaire.ID;
+}
+
+<h2> @ViewBag.Questionnaire.Name</h2>
+
+@Html.Partial("人生有夢")
+
+<br>
+<div class="alert alert-success" role="alert">
+    <h4 class="alert-heading">說明</h4>
+    <p>
+        請選擇您對於目前工作的五大方向的滿意度，與未來理想工作的五大方向的重要程度：
+    </p>
+</div>
+<br>
+
+@using (Html.BeginForm("index1", "Question", FormMethod.Post, new { id = "needs-validation", novalidate = "" }))
+{
+
+
+    <div class="row">
+
+        <div class="col-md-1 col-1" >
+            @Html.DisplayNameFor(model => model.Number)
+        </div>
+        <div class="col-md-4 col-4">
+            @Html.DisplayNameFor(model => model.Name)
+        </div>
+        <div class="col-md-5 col-6">
+            @Html.DisplayNameFor(model => model.Items)
+        </div>
+
+
+
+    </div>
+
+    foreach (var item in Model)
+    {
+        <div class="row border-top">
+            @if (item.Number < 6)
+            {
+
+            <div class="col-md-1 col-1">
+                <h5>@Html.DisplayFor(modelItem => item.Number)</h5>
+            </div>
+            <div class="col-md-4 col-4">
+                <h5>@Html.DisplayFor(modelItem => item.Name)</h5>
+                <p>@Html.DisplayFor(modelItem => item.SecendName)</p>
+
+            </div>
+            <div class="col-md-7 col-6">
+                @if (item.Items.Length != 0)
+                {
+
+                    foreach (var t in item.Items)
+                    {
+                        <div class="row border-top border-bottom">
+
+                            @if (t.Items.Length > 0)
+                            {
+                                <div class="col-md-5">@t.Name </div>
+
+                                var aa = 0;
+
+                                <div class="col-md-7">
+                                    @foreach (var y in t.Items)
+                                    {
+                                    aa++;
+                                    <div class="custom-control custom-radio ">
+
+
+                                        @Html.RadioButton("ID_" + t.ID.ToString(), y.ID, new { data_ParentID = $"{t.ID}", id = $"radio{t.ID}{y.ID}", @class = "custom-control-input", required = "" })
+                                        <label class="custom-control-label" for=@($"radio{t.ID}{y.ID}")>
+                                            @y.Name
+                                        </label>
+                                    </div>
+
+                                    }
+                                </div>
+
+                            }
+                        </div>
+                    }
+                }
+            </div>
+
+
+            }
+
+        </div>
+    }
+
+
+    @Html.AntiForgeryToken()
+    @Html.Hidden("QuestionnaireID", thisQuestionnaireID)
+    @Html.Hidden("key", (object)ViewBag.Key.ToString())
+
+    var i = 0;
+    foreach (var k in Model)
+    {
+        if (k.Items.Length > 0)
+        {
+
+            foreach (var j in k.Items)
+            {
+                @Html.Hidden("responses[" + i + "].Question_ID", j.ID, new { id = $"Q_{@j.ID}" })
+                @Html.Hidden("responses[" + i + "].Response_ID", 0, new { id = $"R_{@j.ID}" })
+                i++;
+            }
+
+        }
+        else
+        {
+            if (k.Number == 6)
+            {
+                <div class="form-group">
+                    <label for="First_Goal_ID">@k.Name</label>
+                    @Html.DropDownList("First_Goal_ID", null, "-----請選擇一個項目-----", htmlAttributes: new { @class = "form-control", required = "" })
+                </div>
+            }
+            if (k.Number == 7)
+            {
+                <div class="form-group">
+                    <label for="inputwhy">@k.Name </label>
+                    <input type="text" name="why" value="" id="inputwhy" class="form-control w-100" required>
+                </div>
+            }
+        }
+    }
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="下一步" class="btn btn-outline-secondary" />
+        </div>
+    </div>
+}
+@section scripts{
+    <script>
+        $(document).ready(function () {
+
+            //rblWorkType作業內容 onchange
+            var radio = $("input[name^='ID_']:radio");
+            radio.click(function () {
+                //alert("你選的值是" + this.value + " Parent" + this.dataset.parentid);
+                //console.log("#Q_" + this.dataset.parentid);
+                $("#R_" + this.dataset.parentid).val(this.value);
+
+            });
+
+
+        });
+    </script>    
+}

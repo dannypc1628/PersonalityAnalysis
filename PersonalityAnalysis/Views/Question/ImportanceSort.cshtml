@@ -1,0 +1,98 @@
+﻿
+
+@{
+    ViewBag.Title = ViewBag.Questionnaire.Name;
+    var i = 0;
+}
+
+<h2>@ViewBag.Title</h2>
+<br>
+<div class="alert alert-success" role="alert">
+    <h4 class="alert-heading">說明</h4>
+    <p>
+        工作付出與期望回報分析表，請依重要順序列出名次，優先選出《最重要〉前三名1.2.3.，再選出《最不重要》前三名12.11.10.，再選出《次重要》三名4.5.6.，再選出《次不重要》三名9.8.7.
+
+    </p>
+</div>
+<br>
+
+<p>在工作表現上，您希望的回報，請依重要順序列出名次，計12項：</p>
+@using (Html.BeginForm("ImportanceSort", "Question", FormMethod.Post, new { id = "needs-validation", novalidate = "" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+        @Html.Hidden("key", (object)ViewBag.Key.ToString())
+        @Html.Hidden("ID", (object)ViewBag.ID.ToString())
+        @foreach (var item in ViewBag.list)
+        {
+            <div class="form-group row">
+                <label class="col-md-3 col-4 col-form-label" for="@($"DropDown{item.ID}")">
+                    @item.Name
+                </label>
+                <div class="col-md-6 col-8" id="div@($"DropDown{item.ID}")">
+                    @Html.DropDownList("responses[" + i + "].Number", (IEnumerable<SelectListItem>)ViewBag.Numbers, "選擇重視度",
+                        htmlAttributes: new { @class = "form-control thisMyGroup", name = "responses[" + i + "].Number",id=$"DropDown{item.ID}", required = "" ,onchange= "getNowSelectList()" })
+                    <div class="invalid-feedback" id="feedback@($"DropDown{item.ID}")">                        
+                    </div>
+                </div>
+                @Html.Hidden("responses[" + i + "].Response_ID", (int)item.ID)
+            </div>
+            i++;
+        }
+
+
+        <div class="mt-5 mb-3 ">
+            @*@Html.Partial("決定")*@
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="下一步" class="btn btn-outline-secondary" />
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        
+        function getNowSelectList() {
+            let x = document.getElementsByClassName("thisMyGroup");
+            let arr = [];
+            for (let i = 0; i < x.length; i++) {
+                let o = x[i];
+                let value = o.value;
+                console.log(i + " " + value);
+                let f = document.getElementById("feedback" + o.id);
+                if (arrRepeat(arr, value)) {
+                    o.classList.add("is-invalid");                    
+                    f.innerHTML = value + "重複了";
+                }
+                else {
+                    o.classList.remove("is-invalid");
+                    arr.push(o.value);
+                    f.innerHTML = "";
+                }                
+            }
+            return arr;
+        }
+
+
+        function arrRepeat(arr, value) {
+            let rep = 0;
+            for (var i = 0; i < arr.length; i++) {
+                if (arr[i] == value && value!="") {
+                    rep++;
+                }
+            };
+            if (rep > 0)
+                return true;
+            return false;
+        }
+    </script>
+}

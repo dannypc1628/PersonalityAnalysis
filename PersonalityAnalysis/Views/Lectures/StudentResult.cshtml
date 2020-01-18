@@ -1,0 +1,109 @@
+﻿@model IEnumerable<PersonalityAnalysis.Models.Result_View>
+
+@{
+    ViewBag.Title = "學員問卷結果";
+}
+
+<div class="row">
+    <div class="col p-0">
+
+        <h2>@ViewBag.Lecture.Name - @ViewBag.Title</h2>
+        <div class="m-2 text-right">
+            @Html.ActionLink("匯出報表", "ExportStudentResult", new { key = @ViewBag.Lecture.Key }, new { @class = " text-success " })
+        </div>
+
+        <table class="table text-center table-hover p-0">
+            <tr>
+                <th class="p-1">
+                    @Html.DisplayNameFor(model => model.Employee_ID)
+                </th>
+                <th class="p-1">
+                    @Html.DisplayNameFor(model => model.Student_Name)
+                </th>
+                <th class="p-1" style="max-width:120px">
+                    @Html.DisplayNameFor(model => model.Goal_Name)
+                </th>
+                <th class="p-2">
+                    @Html.DisplayNameFor(model => model.D)
+                </th>
+                <th class="p-2">
+                    @Html.DisplayNameFor(model => model.I)
+                </th>
+                <th class="p-2">
+                    @Html.DisplayNameFor(model => model.S)
+                </th>
+                <th class="p-2">
+                    @Html.DisplayNameFor(model => model.C)
+                </th>
+                <th class="p-1">
+                    @Html.DisplayNameFor(model => model.Ability)
+                </th>
+                <th class="p-1">
+                    @Html.DisplayNameFor(model => model.Horizontal_Score)
+                </th>
+                <th class="p-1">
+                    @Html.DisplayNameFor(model => model.Vertical_Score)
+                </th>
+                <th class="p-1">
+                    @Html.DisplayNameFor(model => model.T1_Name)
+                </th>
+                <th class="p-1">
+                    @Html.DisplayNameFor(model => model.T2_Name)
+                </th>
+                <th class="p-1">
+                    @Html.DisplayNameFor(model => model.T3_Name)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="p-1">
+                        @Html.DisplayFor(modelItem => item.Employee_ID)
+                    </td>
+                    <td class="p-1">
+                        @Html.DisplayFor(modelItem => item.Student_Name)
+                    </td>
+                    <td class="p-1">
+                        @Html.DisplayFor(modelItem => item.Goal_Name)
+                    </td>
+
+                    @Html.Partial("Q2ResultPartial",new PersonalityAnalysis.Models.ViewModels.Q2ResultViewModel{
+                           C=(int)item.C,
+                           D = (int)item.D,
+                           I = (int)item.I,
+                           S = (int)item.S,
+                           Number = (int)item.DISC_Number
+               })
+
+                    <td class="p-1">
+                        @Html.DisplayFor(modelItem => item.Ability)
+                    </td>
+                    <td class="p-1">
+                        @Html.DisplayFor(modelItem => item.Horizontal_Score)
+                    </td>
+                    <td class="p-1">
+                        @Html.DisplayFor(modelItem => item.Vertical_Score)
+                    </td>
+                    <td class="p-1">
+                        @Html.DisplayFor(modelItem => item.T1_Name)
+                    </td>
+                    <td class="p-1">
+                        @Html.DisplayFor(modelItem => item.T2_Name)
+                    </td>
+                    <td class="p-1">
+                        @Html.DisplayFor(modelItem => item.T3_Name)
+                    </td>
+                    <td class="p-1">
+                        @*@Html.ActionLink("Edit", "Edit", new { id=item.Student_ID }) |*@
+                        @Html.ActionLink("適性分析表", "ResultDetail", new { ID = item.Student_ID })
+                        @*@Html.ActionLink("Delete", "Delete", new { id=item.Student_ID })*@
+                    </td>
+                </tr>
+            }
+
+        </table>
+
+    </div>
+</div>
