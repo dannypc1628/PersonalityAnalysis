@@ -1,19 +1,31 @@
 ﻿@model PersonalityAnalysis.Models.ViewModels.LoginViewModel
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "登入";
 }
 
 <h2>登入</h2>
 
+        <hr />
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.Hidden("Guest", "true")
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="訪客登入" class="btn btn-primary" />
+            <span class="text-danger">@ViewBag.LoginError</span>
+        </div>
+    </div>
+}
 
+<br />
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
     <div class="">
 
-        <hr />
 
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -43,17 +55,6 @@
     </div>
 }
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    @Html.Hidden("Guest","true")
-    <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="訪客登入" class="btn btn-outline-secondary" />
-                <span class="text-danger">@ViewBag.LoginError</span>
-            </div>
-    </div>
-}
 
 
 
